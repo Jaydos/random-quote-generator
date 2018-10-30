@@ -15,7 +15,31 @@ FSJS project 1 - A Random Quote Generator
     - Add at least one `year` and/or `citation` property to at least one 
       quote object.
 ***/
-
+let quotes = [
+  {
+    quote: "When you reach the end of your rope, tie a knot in it and hang on.",
+    source: "Franklin D. Roosevelt",
+    tags: ["Politics", "Motivation"]
+   },
+  {
+    quote: "Learning never exhausts the mind.",
+    source: "Leonardo da Vinci"
+  }, 
+  {
+    quote: "The best preparation for tomorrow is doing your best today.",
+    source: "H.Jackson Brown, Jr.",
+    citation: "Life's Little Instruction Book: 511 suggestions, observations, and reminders on how to live a happy and rewarding life",
+    year: "1991"
+  },
+  {
+    quote: "I have not failed. I've just found 10,000 ways that won't work.",
+    source: "Thomas A. Edison"
+  },
+  {
+    quote: "The secret of getting ahead is getting started.",
+    source: "Mark Twain"
+  }
+];
 
 
 
@@ -25,6 +49,7 @@ FSJS project 1 - A Random Quote Generator
    - use the random number to `return` a random quote object from the 
      `quotes` array.
 ***/
+const getRandomQuote = array => array[Math.floor(Math.random() * array.length)];
 
 
 
@@ -38,7 +63,22 @@ FSJS project 1 - A Random Quote Generator
      they are added to the HTML string.
    - set the `innerHTML` of the `quote-box` div to the HTML string. 
 ***/
+const printQuote = () => {
+  let quote = getRandomQuote(quotes);
+  let quoteStructure = "";
 
+  quoteStructure += `<p class="quote">${quote.quote}</p>\n<p class = "source">${quote.source}`;
+
+  if (quote.citation){
+    quoteStructure += `\n <span class="citation">${quote.citation}</span> \n`;
+  } 
+  if (quote.year){
+    quoteStructure += ` <span class="year">${quote.year}</span>\n`;
+  }
+
+  quoteStructure += "</p>";
+  document.getElementById('quote-box').innerHTML = quoteStructure;
+}
 
 
 
