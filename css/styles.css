@@ -1,9 +1,9 @@
 /* Random Quote Generator Styles */
-
 body {
   background-color: #36b55c;
   color: white;
   font-family: 'Playfair Display', serif;
+  transition: all 0.5s ease-in;
 }
 
 #quote-box {

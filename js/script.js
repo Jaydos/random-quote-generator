@@ -5,16 +5,7 @@ FSJS project 1 - A Random Quote Generator
 
 // Study guide for this project - https://drive.google.com/file/d/1s5grutGuQFwJcQP8bFwEI69Q8FCkGdDk/view?usp=sharing
 
-
-/*** 
-  Create the array of quote objects and name it `quotes`.
-  Add at least five quote objects to the `quotes` array.
-  Give each quote object a `quote` and `source` property.
-
-  Recommended: 
-    - Add at least one `year` and/or `citation` property to at least one 
-      quote object.
-***/
+// Initialise array of quote objects
 let quotes = [
   {
     quote: "When you reach the end of your rope, tie a knot in it and hang on.",
@@ -41,55 +32,90 @@ let quotes = [
   }
 ];
 
-
-
-/***
-  Create the `getRandomQuote` function to:
-   - generate a random number 
-   - use the random number to `return` a random quote object from the 
-     `quotes` array.
-***/
-const getRandomQuote = array => array[Math.floor(Math.random() * array.length)];
-
-
-
-
-/***
-  Create the `printQuote` function to: 
-   - call the `getRandomQuote` function and assign it to a variable.
-   - use the properties of the quote object stored in the variable to 
-     create your HTML string.
-   - use conditionals to make sure the optional properties exist before 
-     they are added to the HTML string.
-   - set the `innerHTML` of the `quote-box` div to the HTML string. 
-***/
-const printQuote = () => {
-  let quote = getRandomQuote(quotes);
-  let quoteStructure = "";
-
-  quoteStructure += `<p class="quote">${quote.quote}</p>\n<p class = "source">${quote.source}`;
-
-  if (quote.citation){
-    quoteStructure += `\n <span class="citation">${quote.citation}</span> \n`;
-  } 
-  if (quote.year){
-    quoteStructure += ` <span class="year">${quote.year}</span>\n`;
+// Function to change background color of the document body
+const changeBackgroundColor = () => {
+  let newColor = [];
+  for (let i = 0; i < 3; i++){
+    newColor.push(Math.floor(Math.random() * 255));
   }
-
-  quoteStructure += "</p>";
-  document.getElementById('quote-box').innerHTML = quoteStructure;
+  document.querySelector('body').style.backgroundColor = `rgb(${newColor[0]}, ${newColor[1]}, ${newColor[2]})`;
 }
 
+// Function to select a random quote object from the quotes array
+const getRandomQuote = array => array[Math.floor(Math.random() * array.length)];
+
+/*
+Function to structure HTML using quote object property values. 
+We will call this function in the printQuote function to keep code clean and readable
+*/
+
+const structureHTML = () => {
+ let quote = getRandomQuote(quotes);
+
+ let quoteHTML = "";
+
+  quoteHTML += `<p class="quote">${quote.quote}</p>\n<p class="source">${quote.source}`;
+
+  // Check if citation property exists. If so, concatenate to HTML structure
+  if (quote.citation){
+    quoteHTML += `\n <span class="citation">${quote.citation}</span> \n`;
+  }
+
+  // As above but for year property 
+  if (quote.year){
+    quoteHTML += ` <span class="year">${quote.year}</span>\n`;
+  }
+
+  quoteHTML += "</p>\n";
+
+  // Check if tags property exists and add to HTML structure if true
+  if (quote.tags){
+    // Iterate through each tag and create new html element for each
+    quote.tags.forEach(function(tag){
+      quoteHTML += `<p><i>${tag}</i></p>\n`;
+    });
+  }
+  return quoteHTML;
+}
+
+// Create printQuote function to display the innerHTML of the quote-box element to a new quote
+const printQuote = () => {
+  // Store the return value of structureHTML in a variable
+  let newQuote = structureHTML();
+
+  // Store quote-box element in a variable for cleaner targeting
+  const quoteBox = document.getElementById('quote-box');
+
+  // Check if new quote matches the quote that is currently displayed
+  if (newQuote === quoteBox.innerHTML){
+    // While new quote matches currently displayed quote, fetch new quote
+    while(newQuote ===quoteBox.innerHTML){
+      newQuote = structureHTML();
+    }
+  }
+  // Change quote-box display to new quote
+  quoteBox.innerHTML = newQuote;
+
+  // Clear the autoChangeQuote interval to reset the counter for another 20 second wait
+  clearInterval(autoChangeQuote);
+}
+
+/* Create a runMachine function that calls functions to: 
+ - change background color
+ - print a new quote
+ - set a new 20 second interval to change quote
+ */
+const runMachine = () => {
+  changeBackgroundColor();
+  printQuote();
+  autoChangeQuote = setInterval(runMachine, 20000);
+}
+
+// Click event listener to initialise the quote machine
+document.getElementById('loadQuote').addEventListener("click", runMachine, false);
+
+// Automatic quote change after 20 seconds
+let autoChangeQuote = setInterval(runMachine, 20000);
 
 
-/***
-  When the "Show another quote" button is clicked, the event listener 
-  below will be triggered, and it will call, or "invoke", the `printQuote` 
-  function. So do not make any changes to the line of code below this 
-  comment.
-***/
 
-document.getElementById('loadQuote').addEventListener("click", printQuote, false);
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
