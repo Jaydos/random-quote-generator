@@ -86,13 +86,11 @@ const printQuote = () => {
   // Store quote-box element in a variable for cleaner targeting
   const quoteBox = document.getElementById('quote-box');
 
-  // Check if new quote matches the quote that is currently displayed
-  if (newQuote === quoteBox.innerHTML){
-    // While new quote matches currently displayed quote, fetch new quote
-    while(newQuote ===quoteBox.innerHTML){
-      newQuote = structureHTML();
-    }
+  // While new quote matches currently displayed quote, fetch new quote
+  while(newQuote ===quoteBox.innerHTML){
+    newQuote = structureHTML();
   }
+  
   // Change quote-box display to new quote
   quoteBox.innerHTML = newQuote;
 
